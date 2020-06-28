@@ -15,25 +15,28 @@ class ShopController extends Controller
         return view('shop',compact('stocks')); //追記変更
     }
     
-    public function myCart() //追加
+    public function myCart(Cart $cart)
     {
-        $my_carts = Cart::all(); //Eloquantで検索
-        return view('mycart',compact('my_carts')); //追記変更
+        $my_carts = $cart->showCart();
+        return view('mycart',compact('my_carts'));
     }
 
-    public function addMyCart(Request $request)
+    public function addMycart(Request $request, Cart $cart)
     {
-        // $user_id = Auth::id(); 
-        $user_id = 1; 
+        //カートに追加の処理
         $stock_id=$request->stock_id;
-        $cart_add_info=Cart::firstOrCreate(['stock_id' => $stock_id,'user_id' => $user_id]);
-        if($cart_add_info->wasRecentlyCreated){
-            $message = 'カートに追加しました';
-        }
-        else{
-            $message = 'カートに登録済みです';
-        }
-        $my_carts = Cart::where('user_id',$user_id)->get();
+        $message = $cart->addCart($stock_id);
+        //追加後の情報を取得
+        $my_carts = $cart->showCart();
+        return view('mycart',compact('my_carts' , 'message'));
+    }
+
+    public function deleteCart(Request $request, Cart $cart)
+    {
+        $stock_id=$request->stock_id;
+        $user = auth()->user();
+        $message = $cart->deleteMyCart($user->id, $stock_id);
+        $my_carts = $cart->showCart();
         return view('mycart',compact('my_carts' , 'message'));
     }
 }
