@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Auth::routes();
+Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider');
+Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterProviderCallback');
 // Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'ShopController@index');
 
