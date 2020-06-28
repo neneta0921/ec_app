@@ -17,10 +17,28 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Auth::routes();
-Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider');
-Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterProviderCallback');
-// Route::get('/home', 'HomeController@index')->name('home');
+
+
+//Route::get('login/twitter', 'Auth\LoginController@redirectToTwitterProvider');
+//Route::get('login/twitter/callback', 'Auth\LoginController@handleTwitterProviderCallback');
+
+// Auth Twitter
+Route::get('auth/twitter', 'Auth\AuthController@TwitterRedirect');
+Route::get('auth/twitter/callback', 'Auth\AuthController@TwitterCallback');
+Route::get('auth/twitter/logout', 'Auth\AuthController@getLogout');
+
+// Auth Google
+Route::get('auth/google', 'Auth\AuthController@GoogleRedirect');
+Route::get('auth/google/callback', 'Auth\AuthController@GoogleCallback');
+Route::get('auth/google/logout', 'Auth\AuthController@getLogout');
+
+// Auth Facebook
+Route::get('auth/facebook', 'Auth\AuthController@FacebookRedirect');
+Route::get('auth/facebook/callback', 'Auth\AuthController@FacebookCallback');
+Route::get('auth/facebook/logout', 'Auth\AuthController@getLogout');
+
+
+Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/', 'ShopController@index');
 
 // ログイン状態
@@ -30,3 +48,5 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/cartdelete', 'ShopController@deleteCart');
     Route::post('/checkout', 'ShopController@checkout'); //追記
 });
+
+Auth::routes();
