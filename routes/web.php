@@ -22,6 +22,7 @@ Auth::routes();
 Route::get('/', 'ShopController@index');
 
 // ログイン状態
-Route::group(['middleware' => 'auth'], function() {
+// Route::group(['middleware' => 'auth'], function() {
     Route::get('/mycart', 'ShopController@myCart');
-});
+    Route::post('/mycart', 'ShopController@addMyCart');//追記
+// });
